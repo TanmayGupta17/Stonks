@@ -45,7 +45,7 @@ export default function IndexPage() {
             <Text style={styles.buttonText}>Stock Selection</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#f39c12'}]} onPress={() => router.push('/BullishBearish')}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#f39c12'}]} onPress={() => router.push('/dashboard')}>
             <Text style={styles.buttonText}>Bullish / Bearish</Text>
           </TouchableOpacity>
 
