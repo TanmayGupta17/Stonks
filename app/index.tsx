@@ -41,7 +41,7 @@ export default function IndexPage() {
             <Text style={styles.buttonText}>Graph Game</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#16a085'}]} onPress={() => router.push('/StockSelection')}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#16a085'}]} onPress={() => router.push('/Learn')}>
             <Text style={styles.buttonText}>Stock Selection</Text>
           </TouchableOpacity>
 
