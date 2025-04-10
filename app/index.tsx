@@ -49,7 +49,7 @@ export default function IndexPage() {
             <Text style={styles.buttonText}>Bullish / Bearish</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#8e44ad'}]} onPress={() => router.push('/CurrentGame')}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#8e44ad'}]} onPress={() => router.push('/simulator')}>
             <Text style={styles.buttonText}>Current Game</Text>
           </TouchableOpacity>
         </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#121212',
-    paddingTop: 1,
+    paddingTop: 50, // Increased padding to avoid status bar overlap
   },
   heading: {
     fontSize: 32,
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   },
   stockBar: {
     backgroundColor: '#000',
+    padding: 10,
   },
   stockItem: {
     marginHorizontal: 15,
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 20,
+    paddingVertical: 20,
   },
   button: {
     width: Dimensions.get('window').width * 0.8,
