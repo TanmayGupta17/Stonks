@@ -25,7 +25,6 @@ const BullishBearishGame = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [showExplanation, setShowExplanation] = useState(false);
   
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const position = useRef(new Animated.ValueXY()).current;
@@ -196,23 +195,15 @@ const BullishBearishGame = () => {
     }
   };
 
-  const loadNextNews = () => {
-    fadeAnim.setValue(0);
-    setShowExplanation(false);
-    
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  };
-
   const showToast = (message: string) => {
     if (Platform.OS === 'android') {
       ToastAndroid.show(message, ToastAndroid.SHORT);
     } else {
-      // On iOS we could implement a custom toast
-      Alert.alert(message);
+      // Quick feedback without blocking alert
+      // Using setTimeout to allow animation to complete
+      setTimeout(() => {
+        Alert.alert('Feedback', message, [{ text: 'OK' }], { cancelable: true });
+      }, 100);
     }
   };
 
@@ -250,6 +241,7 @@ const BullishBearishGame = () => {
         duration: 300,
         useNativeDriver: true,
       }).start(() => {
+        // Reset position immediately
         position.setValue({ x: 0, y: 0 });
         
         if (isCorrect) {
@@ -260,17 +252,25 @@ const BullishBearishGame = () => {
           showToast("❌ Wrong!");
         }
         
-        setShowExplanation(true);
+        // Move to next card immediately
+        const nextIndex = currentIndex + 1;
         
-        // Show explanation for 3 seconds before moving to next card
-        setTimeout(() => {
-          if (currentIndex + 1 >= newsList.length) {
-            showFinalDialog();
-          } else {
-            setCurrentIndex(prevIndex => prevIndex + 1);
-            loadNextNews();
-          }
-        }, 3000);
+        if (nextIndex >= newsList.length) {
+          // Game over
+          showFinalDialog();
+        } else {
+          // Move to next card
+          setCurrentIndex(nextIndex);
+          // Reset animation for next card
+          fadeAnim.setValue(0);
+          
+          // Fade in animation for new card
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+          }).start();
+        }
       });
     }
   };
@@ -304,8 +304,15 @@ const BullishBearishGame = () => {
   const resetGame = () => {
     setCurrentIndex(0);
     setScore(0);
-    setShowExplanation(false);
-    loadNextNews();
+    position.setValue({ x: 0, y: 0 }); // Reset position
+    fadeAnim.setValue(0);
+    
+    // Fade in the first card
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
   };
 
   // Rotate and opacity based on position
@@ -373,15 +380,6 @@ const BullishBearishGame = () => {
           <Text style={styles.newsDetails}>
             {currentItem.newsDetails}
           </Text>
-          
-          {showExplanation && (
-            <View style={styles.explanationContainer}>
-              <Text style={styles.explanationTitle}>EXPLANATION:</Text>
-              <Text style={styles.explanationText}>
-                {currentItem.explanation}
-              </Text>
-            </View>
-          )}
         </Animated.View>
         
         <View style={styles.statsContainer}>
@@ -465,23 +463,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: '#ddd',
     lineHeight: 22,
-  },
-  explanationContainer: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  explanationTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#00ff9d',
-    marginBottom: 5,
-  },
-  explanationText: {
-    fontSize: 14,
-    color: '#fff',
-    lineHeight: 20,
   },
   statsContainer: {
     flexDirection: 'row',

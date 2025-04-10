@@ -49,7 +49,7 @@ export default function IndexPage() {
             <Text style={styles.buttonText}>Bullish / Bearish</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#8e44ad'}]} onPress={() => router.push('/Lian')}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#8e44ad'}]} onPress={() => router.push('/sid')}>
             <Text style={styles.buttonText}>Current Game</Text>
           </TouchableOpacity>
         </View>
